@@ -8,6 +8,7 @@ import java.util.List;
  * Created by Cptonduty on 2017-03-09.
  */
 public class Book {
+    private String lentByUser;
     private String title,author;
     private int year;
     private int count;
@@ -29,11 +30,17 @@ public class Book {
         if(isLent==false){
             return " Available";
         }else{
-            return " Lent";
+            return " Lent by: ";
         }
     }
     public void updateMyCopies(Long bookId){
 
+    }
+    public void setLentByUser(String userName){
+        lentByUser=userName;
+    }
+    public String getLentByUser(){
+        return lentByUser;
     }
     public boolean getIsLent(){
         return isLent;
@@ -51,6 +58,9 @@ public class Book {
         return year;
     }
 
+    public String showAllBooksDetails(){
+        return toString()+isAvaiable()+" "+getLentByUser();
+    }
 
     @Override
     public String toString() {

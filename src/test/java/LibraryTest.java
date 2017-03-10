@@ -50,8 +50,9 @@ public class LibraryTest {
         lab2.addNewBook("Metro",2003,"Dimitry Glukovsky");
         lab2.showAllBooks();
         lab2.removeBookById(2);
-       // lab2.lentBookById(3);
-       // lab2.lentBookById(2);
+       lab2.lentBookById(3,"Andrzej Szpakowski");
+       lab2.lentBookById(2,"Kristof Korbowski");
         lab2.showAllBooks();
+        lab2.showAllDetailsById(3);
     }
 }

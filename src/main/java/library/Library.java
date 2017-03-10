@@ -44,7 +44,7 @@ public class Library {
     public void lentBookById(long bookId,String userName){
         if(allBooks.containsKey(bookId)){
             allBooks.get(bookId).setIsLent();
-            LibraryUser libUser =new LibraryUser(bookId,userName);
+            allBooks.get(bookId).setLentByUser(userName);
         }else
         {
             System.out.println("Book is not in Library");
@@ -56,6 +56,11 @@ public class Library {
        for(Map.Entry<Long,Book> entry: allBooks.entrySet()){
            System.out.println(entry.getValue().toString());
        }
+    }
+    public void showAllDetailsById(long bookId){
+        if(allBooks.containsKey(bookId)){
+            System.out.println(allBooks.get(bookId).showAllBooksDetails());
+        }
     }
 
 
