@@ -62,41 +62,161 @@ public class Library {
             System.out.println(allBooks.get(bookId).showAllBooksDetails());
         }
     }
-
-    public void performSearchWithAllArgs(Object ... params){
-        Map<Long,Book> bookFound = new HashMap<>();
+    public void performSearchWithAllArgsv2(Object ... params){
+        int count=0;
         String s1=null;
         String s2=null;
         int y=0;
+        short stringCount=0;
+        short yearCount=0;
+        List<Object> objects = new ArrayList<>();
         for (Object o:params){
-            if(o instanceof String){
-                if(s1!=null){
-                    s2=(String)o;
-                }else
-                s1=(String)o;
-            }else{
-                if (o instanceof Integer){
-                    y=(Integer)o;
+            if (count<3){
+                if(o instanceof String){
+                    if(s1!=null){
+                        s2=(String)o;
+                        stringCount++;
+                    }else {
+                        if(s1==null) {
+                            s1 = (String) o;
+                            stringCount++;
+                        }else{
+                            System.out.println("Wrong args");
+                            return;
+                        }
+                    }
+                }else if(o instanceof Integer){
+                    if (y==0){
+                        y=(Integer)o;
+                        yearCount++;
+                    }else{
+                        System.out.println("Invalid args");
+                        return;
+                    }
+                }else{
+                    System.out.println("Wrong arguments type2");
+                    return;
                 }
+                objects.add(o);
+                count++;
+            }else{
+                System.out.println("Wrong args");
+                return;
             }
         }
-        if(s1==null&&s2==null&&y==0){
-            System.out.println("Wrong arguments");
+    }
+    public void checkMyObjects(Object obj){
+
+    }
+
+    public void performSearchWithAllArgs(Object ... params) {
+        Map<Long, Book> booksFound = new HashMap<>();
+        String s1 = null;
+        String s2 = null;
+        int y = 0, count = 1;
+        short stringCount = 0;
+        short yearCount = 0;
+
+        for (Object o : params) {
+            if(count<3){
+            if (o instanceof String) {
+                if (s1 != null) {
+                    s2 = (String) o;
+                    stringCount++;
+                } else {
+                    if (s1 == null) {
+                        s1 = (String) o;
+                        stringCount++;
+                    } else {
+                        System.out.println("Wrong args");
+                        return;
+                    }
+                }
+            } else if (o instanceof Integer) {
+                if (y == 0) {
+                    y = (Integer) o;
+                    yearCount++;
+                } else {
+                    System.out.println("Invalid args");
+                    return;
+                }
+            } else {
+                System.out.println("Wrong arguments type2");
+                return;
+            }
+            count++;
+        }else{
+            System.out.println("Wrong args");
+            return;
         }
+        }
+        if(count==1){
+            System.out.println("Pass arguments");
+            return;
+        }
+        System.out.println("Counts: "+count);
+        System.out.println("stringcount: "+stringCount +"yearCount: "+yearCount);
         //put all to the table that will require only 3 cheeks
         if(s1!=null&&s2!=null&&y!=0){
             for (Map.Entry<Long,Book> entry:allBooks.entrySet()){
-                if((entry.getValue().getTitle().equals(s1)|| entry.getValue().getAuthor().equals(s1))&&
-                entry.getValue().getYear()==y){
-                    bookFound.put(entry.getKey(),entry.getValue());
+                if(((entry.getValue().getTitle().equals(s1)|| entry.getValue().getAuthor().equals(s1))&&
+                entry.getValue().getYear()==y)&&((entry.getValue().getTitle().equals(s2)|| entry.getValue().getAuthor().equals(s2))&&
+                        entry.getValue().getYear()==y)){
+                    booksFound.put(entry.getKey(),entry.getValue());
                 }
             }
         }
-        for (Map.Entry<Long,Book> entry: bookFound.entrySet()){
-            System.out.println(entry.getValue().toString());
+        if(s1!=null&&s2!=null&&y==0){
+            for (Map.Entry<Long,Book> entry:allBooks.entrySet()){
+                if(((entry.getValue().getTitle().equalsIgnoreCase(s1)|| entry.getValue().getAuthor().equalsIgnoreCase(s1))&&
+                        ((entry.getValue().getTitle().equalsIgnoreCase(s2)|| entry.getValue().getAuthor().equalsIgnoreCase(s2))))){
+                    booksFound.put(entry.getKey(),entry.getValue());
+                }
+            }
+        }
+        if (y!=0&&s1!=null&&s2==null){
+            for (Map.Entry<Long,Book> entry:allBooks.entrySet()){
+                if(((entry.getValue().getTitle().equalsIgnoreCase(s1)|| entry.getValue().getAuthor().equalsIgnoreCase(s1)))&&
+                        entry.getValue().getYear()==y){
+                    booksFound.put(entry.getKey(),entry.getValue());
+                }
+            }
+        }
+        if (y!=0&&s1==null&&s2!=null){
+            for (Map.Entry<Long,Book> entry:allBooks.entrySet()){
+                if(((entry.getValue().getTitle().equalsIgnoreCase(s2)|| entry.getValue().getAuthor().equalsIgnoreCase(s2)))&&
+                        entry.getValue().getYear()==y){
+                    booksFound.put(entry.getKey(),entry.getValue());
+                }
+            }
+        }
+        if (y!=0&&s1==null&&s2==null){
+            for (Map.Entry<Long,Book> entry:allBooks.entrySet()){
+                if(entry.getValue().getYear()==y){
+                    booksFound.put(entry.getKey(),entry.getValue());
+                }
+            }
+        }
+        if (y==0&&s1!=null&&s2==null){
+            for (Map.Entry<Long,Book> entry:allBooks.entrySet()){
+                if(entry.getValue().getAuthor().equalsIgnoreCase(s1)|| entry.getValue().getTitle().equalsIgnoreCase(s1)){
+                    booksFound.put(entry.getKey(),entry.getValue());
+                }
+            }
+        }
+        if (y==0&&s1==null&&s2!=null){
+            for (Map.Entry<Long,Book> entry:allBooks.entrySet()){
+                if(entry.getValue().getAuthor().equalsIgnoreCase(s2)|| entry.getValue().getTitle().equalsIgnoreCase(s2)){
+                    booksFound.put(entry.getKey(),entry.getValue());
+                }
+            }
+        }
+        for (Map.Entry<Long,Book> entry: booksFound.entrySet()){
+            showAllDetailsById(entry.getValue().getId());
         }
         System.out.println("s1: "+s1+" s2:"+s2+" year: "+y);
     }
+}
 
 
 
@@ -177,4 +297,4 @@ public class Library {
         return b;
     }
     */
-}
+

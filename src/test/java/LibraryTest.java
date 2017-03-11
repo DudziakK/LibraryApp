@@ -59,8 +59,16 @@ public class LibraryTest {
     public void search(){
         Library lab = new Library();
         lab.addNewBook("Metro",2004,"Dimitry Glukovsky");
+        lab.addNewBook("Metro",2002,"Dimitry Glukovsky");
         lab.addNewBook("Game of Thrones",2005,"George R.R. Martin");
-        lab.performSearchWithAllArgs("Metro",'c',"Dimitry Glukovsky");
+        lab.addNewBook("Metro",2005,"Dimitry Glukovsky");
+        lab.addNewBook("Stalker",2004,"Michał Głogowski");
+        lab.addNewBook("Metro",2003,"Dimitry Glukovsky");
+        lab.addNewBook("Game of Thrones",2005,"George R.R. Martin");
+        lab.performSearchWithAllArgs(2005);
+        //lab.performSearchWithAllArgs("George R.R. Martin");
+        //lab.performSearchWithAllArgsv2("Metro","hehe",2004,"George R.R. Martin");
+        //lab.performSearchWithAllArgsv2("Metro",2004,"Hehe","hehe");
         //lab.performSearchWithAllArgs(2000,"Metro","Glukovsky");
         //lab.performSearchWithAllArgs("glukovsky",2001, "Metro");
         //lab.performSearchWithAllArgs(2001, "Metro");
