@@ -55,4 +55,15 @@ public class LibraryTest {
         lab2.showAllBooks();
         lab2.showAllDetailsById(3);
     }
+    @Test
+    public void search(){
+        Library lab = new Library();
+        lab.addNewBook("Metro",2004,"Dimitry Glukovsky");
+        lab.addNewBook("Game of Thrones",2005,"George R.R. Martin");
+        lab.performSearchWithAllArgs("Metro",'c',"Dimitry Glukovsky");
+        //lab.performSearchWithAllArgs(2000,"Metro","Glukovsky");
+        //lab.performSearchWithAllArgs("glukovsky",2001, "Metro");
+        //lab.performSearchWithAllArgs(2001, "Metro");
+
+    }
 }

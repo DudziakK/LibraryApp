@@ -63,6 +63,43 @@ public class Library {
         }
     }
 
+    public void performSearchWithAllArgs(Object ... params){
+        Map<Long,Book> bookFound = new HashMap<>();
+        String s1=null;
+        String s2=null;
+        int y=0;
+        for (Object o:params){
+            if(o instanceof String){
+                if(s1!=null){
+                    s2=(String)o;
+                }else
+                s1=(String)o;
+            }else{
+                if (o instanceof Integer){
+                    y=(Integer)o;
+                }
+            }
+        }
+        if(s1==null&&s2==null&&y==0){
+            System.out.println("Wrong arguments");
+        }
+        //put all to the table that will require only 3 cheeks
+        if(s1!=null&&s2!=null&&y!=0){
+            for (Map.Entry<Long,Book> entry:allBooks.entrySet()){
+                if((entry.getValue().getTitle().equals(s1)|| entry.getValue().getAuthor().equals(s1))&&
+                entry.getValue().getYear()==y){
+                    bookFound.put(entry.getKey(),entry.getValue());
+                }
+            }
+        }
+        for (Map.Entry<Long,Book> entry: bookFound.entrySet()){
+            System.out.println(entry.getValue().toString());
+        }
+        System.out.println("s1: "+s1+" s2:"+s2+" year: "+y);
+    }
+
+
+
 
 
     /*
