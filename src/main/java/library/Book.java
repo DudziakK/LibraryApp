@@ -1,21 +1,14 @@
 package library;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-
 /**
- * Created by Cptonduty on 2017-03-09.
+ * Created by Krzysztof Dudziak on 2017-03-09.
  */
-public class Book {
+ class Book {
     private String lentByUser;
     private String title,author;
     private int year;
-    private int count;
     private long id;
     private boolean isLent;
-    private List<Long> myCopies = new ArrayList<>();
-
 
     Book(long id,String title, int year, String author){
         this.id=id;
@@ -26,21 +19,23 @@ public class Book {
     public long getId() {
         return id;
     }
-    public String isAvaiable(){
-        if(isLent==false){
+    private String isAvailable(){
+        if(!isLent){
             return " Available";
         }else{
             return " Lent by: ";
         }
     }
-    public void updateMyCopies(Long bookId){
 
-    }
     public void setLentByUser(String userName){
         lentByUser=userName;
     }
-    public String getLentByUser(){
-        return lentByUser;
+    private String getLentByUser(){
+        if (lentByUser == null) {
+            return " YES";
+        }else{
+            return lentByUser;
+        }
     }
     public boolean getIsLent(){
         return isLent;
@@ -57,13 +52,12 @@ public class Book {
     public int getYear(){
         return year;
     }
-
     public String showAllBooksDetails(){
-        return toString()+isAvaiable()+" "+getLentByUser();
+        return toString()+isAvailable()+" "+getLentByUser();
     }
 
     @Override
     public String toString() {
-        return ("Id:"+id+"Title:"+title+"  Year:"+year+"  Author:"+author);
+        return ("Id:"+id+" Title:"+title+" Year:"+year+" Author:"+author);
     }
 }

@@ -1,5 +1,6 @@
 package library;
 
+import java.nio.ShortBuffer;
 import java.util.*;
 
 /**
@@ -10,7 +11,8 @@ public class Library {
     private Map<DistinctBookKey, DistinctBook> libraryMap = new HashMap<>();
     private Map<Long, Book> allBooks = new HashMap<>();
 
-
+    //Allows to add new book to the library with three arguments, if book already exists in library method adds book to the DistinctBook instance,
+    // otherwise new catalog is created and book is assigned to newly created DistinctBook object
     public void addNewBook(String title, int year, String author) {
         DistinctBook distBook = new DistinctBook();
         Book book = new Book(id, title, year, author);
@@ -24,101 +26,64 @@ public class Library {
         allBooks.put(id, book);
         id++;
     }
-
-    public void showAllBooks() {
+    //Allows to list all books distinctly with information about how many is curently available or lent
+    public String showAllBooksDistinctly() {
+        String allBooks="";
         for (Map.Entry<DistinctBookKey, DistinctBook> entry : libraryMap.entrySet()) {
-            entry.getValue().listAllBooks();
+            allBooks+=entry.getValue().listAllBooks()+"\n";
         }
+        return allBooks;
     }
 
-    public void removeBookById(long bookId) {
+    public boolean removeBookById(long bookId) {
         if(allBooks.containsKey(bookId)&& !(allBooks.get(bookId).getIsLent())){
             DistinctBookKey dbkTemp = new DistinctBookKey(allBooks.get(bookId).getTitle(),allBooks.get(bookId).getYear(),allBooks.get(bookId).getAuthor());
             if(libraryMap.containsKey(dbkTemp)){
-                libraryMap.get(dbkTemp).removeBookFromCatalog(bookId);
+                libraryMap.get(dbkTemp).removeBook(bookId);
             }
             allBooks.remove(bookId);
-
+            return true;
+        }else{
+            return false;
         }
     }
-    public void lentBookById(long bookId,String userName){
-        if(allBooks.containsKey(bookId)){
+    public boolean lentBookById(long bookId,String userName){
+        if(allBooks.containsKey(bookId)&&!allBooks.get(bookId).getIsLent()){
             allBooks.get(bookId).setIsLent();
             allBooks.get(bookId).setLentByUser(userName);
+            return true;
         }else
         {
             System.out.println("Book is not in Library");
+            return false;
         }
-
     }
-
-    public void showAllBooksAgain() {
+    public void showAllBooks() {
        for(Map.Entry<Long,Book> entry: allBooks.entrySet()){
            System.out.println(entry.getValue().toString());
        }
     }
-    public void showAllDetailsById(long bookId){
+    public String showAllDetailsById(long bookId){
+        String bookDetails="";
         if(allBooks.containsKey(bookId)){
-            System.out.println(allBooks.get(bookId).showAllBooksDetails());
+            bookDetails+=allBooks.get(bookId).showAllBooksDetails();
+        }else{
+            bookDetails+="Book with id:"+bookId+" is not in library";
         }
-    }
-    public void performSearchWithAllArgsv2(Object ... params){
-        int count=0;
-        String s1=null;
-        String s2=null;
-        int y=0;
-        short stringCount=0;
-        short yearCount=0;
-        List<Object> objects = new ArrayList<>();
-        for (Object o:params){
-            if (count<3){
-                if(o instanceof String){
-                    if(s1!=null){
-                        s2=(String)o;
-                        stringCount++;
-                    }else {
-                        if(s1==null) {
-                            s1 = (String) o;
-                            stringCount++;
-                        }else{
-                            System.out.println("Wrong args");
-                            return;
-                        }
-                    }
-                }else if(o instanceof Integer){
-                    if (y==0){
-                        y=(Integer)o;
-                        yearCount++;
-                    }else{
-                        System.out.println("Invalid args");
-                        return;
-                    }
-                }else{
-                    System.out.println("Wrong arguments type2");
-                    return;
-                }
-                objects.add(o);
-                count++;
-            }else{
-                System.out.println("Wrong args");
-                return;
-            }
-        }
-    }
-    public void checkMyObjects(Object obj){
-
+        return bookDetails;
     }
 
-    public void performSearchWithAllArgs(Object ... params) {
+    public void searchWithAllArgs(Object ... params) {
         Map<Long, Book> booksFound = new HashMap<>();
         String s1 = null;
         String s2 = null;
+        int foundCount=0;
         int y = 0, count = 1;
         short stringCount = 0;
         short yearCount = 0;
 
         for (Object o : params) {
-            if(count<3){
+            if(count<4){
             if (o instanceof String) {
                 if (s1 != null) {
                     s2 = (String) o;
@@ -151,11 +116,11 @@ public class Library {
         }
         }
         if(count==1){
-            System.out.println("Pass arguments");
+            System.out.println("You passed 0 arguments");
             return;
         }
         System.out.println("Counts: "+count);
-        System.out.println("stringcount: "+stringCount +"yearCount: "+yearCount);
+        System.out.println("stringCount: "+stringCount +"yearCount: "+yearCount);
         //put all to the table that will require only 3 cheeks
         if(s1!=null&&s2!=null&&y!=0){
             for (Map.Entry<Long,Book> entry:allBooks.entrySet()){
@@ -163,6 +128,7 @@ public class Library {
                 entry.getValue().getYear()==y)&&((entry.getValue().getTitle().equals(s2)|| entry.getValue().getAuthor().equals(s2))&&
                         entry.getValue().getYear()==y)){
                     booksFound.put(entry.getKey(),entry.getValue());
+                    foundCount++;
                 }
             }
         }
@@ -171,6 +137,7 @@ public class Library {
                 if(((entry.getValue().getTitle().equalsIgnoreCase(s1)|| entry.getValue().getAuthor().equalsIgnoreCase(s1))&&
                         ((entry.getValue().getTitle().equalsIgnoreCase(s2)|| entry.getValue().getAuthor().equalsIgnoreCase(s2))))){
                     booksFound.put(entry.getKey(),entry.getValue());
+                    foundCount++;
                 }
             }
         }
@@ -179,6 +146,7 @@ public class Library {
                 if(((entry.getValue().getTitle().equalsIgnoreCase(s1)|| entry.getValue().getAuthor().equalsIgnoreCase(s1)))&&
                         entry.getValue().getYear()==y){
                     booksFound.put(entry.getKey(),entry.getValue());
+                    foundCount++;
                 }
             }
         }
@@ -187,6 +155,7 @@ public class Library {
                 if(((entry.getValue().getTitle().equalsIgnoreCase(s2)|| entry.getValue().getAuthor().equalsIgnoreCase(s2)))&&
                         entry.getValue().getYear()==y){
                     booksFound.put(entry.getKey(),entry.getValue());
+                    foundCount++;
                 }
             }
         }
@@ -194,6 +163,7 @@ public class Library {
             for (Map.Entry<Long,Book> entry:allBooks.entrySet()){
                 if(entry.getValue().getYear()==y){
                     booksFound.put(entry.getKey(),entry.getValue());
+                    foundCount++;
                 }
             }
         }
@@ -201,6 +171,7 @@ public class Library {
             for (Map.Entry<Long,Book> entry:allBooks.entrySet()){
                 if(entry.getValue().getAuthor().equalsIgnoreCase(s1)|| entry.getValue().getTitle().equalsIgnoreCase(s1)){
                     booksFound.put(entry.getKey(),entry.getValue());
+                    foundCount++;
                 }
             }
         }
@@ -208,93 +179,18 @@ public class Library {
             for (Map.Entry<Long,Book> entry:allBooks.entrySet()){
                 if(entry.getValue().getAuthor().equalsIgnoreCase(s2)|| entry.getValue().getTitle().equalsIgnoreCase(s2)){
                     booksFound.put(entry.getKey(),entry.getValue());
+                    foundCount++;
                 }
             }
         }
-        for (Map.Entry<Long,Book> entry: booksFound.entrySet()){
-            showAllDetailsById(entry.getValue().getId());
+        if(foundCount==0){
+            System.out.println("Not found");
+            return;
+        }else{
+            for (Map.Entry<Long,Book> entry: booksFound.entrySet()){
+                showAllDetailsById(entry.getValue().getId());
+            }
         }
         System.out.println("s1: "+s1+" s2:"+s2+" year: "+y);
     }
 }
-
-
-
-
-
-    /*
-
-    private static long id=1;
-    private static long id2=1;
-    private Map<Long,Book> libraryMap = new HashMap<>();
-    private Map<Long,Book> libraryMap2 = new HashMap<>();
-
-    public void addNewBook(String title, int year, String author){
-        Book book = new Book(id,title,year,author);
-        libraryMap.put(id,book);
-        id++;
-    }
-
-    public void addNewBookWithCounting(String title,int year,String author){
-        Book bookToCheck = new Book(id,title,year,author);
-        for (Map.Entry<Long,Book> entry: libraryMap.entrySet()){
-            if (!(bookToCheck.equals(entry.getValue()))){
-                libraryMap2.put(id2,bookToCheck);
-                id2++;
-                System.out.println("is it working?");
-
-            }
-        }
-    }
-
-    public void getBookById(long bookId){
-        if(libraryMap.containsKey(bookId)) {
-            System.out.println(libraryMap.get(bookId));
-        }else{
-            System.out.println("There is no such a book");
-        }
-    }
-
-    public boolean removeBook(long bookId){
-        if (libraryMap.containsKey(bookId)&&!libraryMap.get(bookId).getIsLent()){
-            libraryMap.remove(bookId);
-            System.out.println("Book is removed from catalog");
-            return true;
-        }else{
-            System.out.println("This book is not in catalog");
-            return false;
-        }
-    }
-    public boolean lentBook(long bookId,String userName){
-        if (libraryMap.containsKey(bookId)&&!libraryMap.get(bookId).getIsLent()){
-           libraryMap.get(bookId).setIsLent();
-            System.out.println("Book is lent to - "+userName);
-            LibraryUser lb = new LibraryUser(userName,libraryMap.get(bookId));
-            return true;
-        }else{
-            System.out.println("Book is already lent or doesn't exist in database");
-            return false;
-        }
-    }
-
-    public void listAllBooks(){
-        int count=0;
-        List<Book> uniqueList = new ArrayList<>();
-        for (Map.Entry<Long,Book> entry: libraryMap.entrySet()){
-            count=0;
-            for (Map.Entry<Long,Book> check: libraryMap.entrySet()) {
-                if (entry.getValue().equals(check.getValue())){
-                    count++;
-                }
-            }
-            System.out.println(entry.getValue().toString()+count);
-
-        }
-    }
-    public boolean simpletest(long first, long second){
-        boolean b=false;
-        b=libraryMap.get(first).equals(libraryMap.get(second));
-        return b;
-    }
-    */
-

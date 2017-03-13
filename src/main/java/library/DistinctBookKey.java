@@ -1,7 +1,7 @@
 package library;
 
 /**
- * Created by Cptonduty on 2017-03-10.
+ * Created by Krzysztof Dudziak on 2017-03-10.
  */
 class DistinctBookKey {
     private String title,author;

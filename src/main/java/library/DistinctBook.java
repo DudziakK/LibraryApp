@@ -5,29 +5,28 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by Cptonduty on 2017-03-10.
+ * Created by Krzysztof Dudziak on 2017-03-10.
  */
-public class DistinctBook {
-    private int lentCount=0;
-    private int availableCount=0;
-    private String title,author;
-    private int year;
+ class DistinctBook {
+
     private List<Book> singleBooks = new ArrayList<>();
 
-    public void addToList(Book book){
+    void addToList(Book book){
         singleBooks.add(book);
     }
-    public void listAllBooks(){
+    String listAllBooks(){
+        String allbooks="";
         Iterator<Book> iter = singleBooks.iterator();
         if(iter.hasNext()){
-            System.out.println(iter.next().toString()+countBooks());
+            allbooks+=iter.next().toString()+countBooks();
+           // System.out.println(iter.next().toString()+countBooks());
         }
-
-
+        return allbooks;
     }
+
     private String countBooks(){
-        lentCount=0;
-        availableCount=0;
+        int lentCount=0;
+        int availableCount=0;
         for (Book books:singleBooks){
             if(books.getIsLent()){
                 lentCount++;
@@ -37,15 +36,15 @@ public class DistinctBook {
         }
         return " Available: "+availableCount+" Lent: "+lentCount;
     }
-    public void removeBookFromCatalog(long bookId){
+
+    void removeBook(long bookId){
         Iterator<Book> iter = singleBooks.iterator();
         if(iter.hasNext()){
             Book book= iter.next();
             if(book.getId()==bookId){
                 singleBooks.remove(book);
-                System.out.println("Book with Id: "+ bookId+"is removed");
+                System.out.println("Book with Id:"+ bookId+" is removed");
             }
-
         }
     }
 }
