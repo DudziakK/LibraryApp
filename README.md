@@ -1,3 +1,2 @@
-#to build aplication
-clone GitHub repository to your project
-use in terminal mvn package
+#Build aplication
+clone GitHub repository to your project and use "mvn package" in terminal
