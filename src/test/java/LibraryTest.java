@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
  * Created by Krzysztof Dudziak on 2017-03-09.
  */
 public class LibraryTest {
-    static Library library;
+    private static Library library;
 
     @Before
     public void shouldCreateTestEnviroment() {
@@ -42,9 +42,9 @@ public class LibraryTest {
     @Test
     public void shouldLentBookAndPassName(){
         library.addNewBook("Metro", 2004, "Dimitry Glukovsky");
-        library.showAllDetailsById(1);
+        System.out.println(library.showAllDetailsById(1));
         assertTrue(library.lentBookById(1,"Krzysztof Dudziak"));
-        library.showAllDetailsById(1);
+        System.out.println(library.showAllDetailsById(1));
         assertFalse(library.lentBookById(1,"Krzysztof Dudziak"));
     }
     @Test
@@ -64,7 +64,7 @@ public class LibraryTest {
 
     }
     @Test
-    public void shouldSearchBookWithDifferentArguments(){
+    public void shouldSearchBookWithWrongArguments(){
         library.addNewBook("Metro", 2004, "Dimitry Glukovsky");
         library.addNewBook("Metro", 2002, "Dimitry Glukovsky");
         library.addNewBook("Game of Thrones", 2005, "George R.R. Martin");
@@ -72,6 +72,30 @@ public class LibraryTest {
         library.addNewBook("Stalker", 2004, "Michał Głogowski");
         library.addNewBook("Metro", 2003, "Dimitry Glukovsky");
         library.addNewBook("Game of Thrones", 2005, "George R.R. Martin");
-        library.searchWithAllArgs("Metro");
+        System.out.println(library.searchWithAllArgs('c'));
+        System.out.println(library.searchWithAllArgs("Metro",2004,"Dimitry Glukovsky","Stalker"));
+        System.out.println(library.searchWithAllArgs());
+        System.out.println(library.searchWithAllArgs("Java"));
+        assertEquals("Wrong arguments type",library.searchWithAllArgs('c',2004));
+        assertEquals("Pass 3 or less arguments",library.searchWithAllArgs("Metro",2003,"Michał Głogowski",2004,'c'));
+        assertEquals("You passed 0 arguments",library.searchWithAllArgs());
+        assertEquals("Not found",library.searchWithAllArgs("Java"));
+    }
+    @Test
+    public void shouldSearchBookWithDifferentArguments(){
+        library.addNewBook("Metro", 2004, "Dimitry Glukovsky");
+        library.addNewBook("Metro", 2002, "Dimitry Glukovsky");
+        library.addNewBook("Game of Thrones", 2005, "George R.R. Martin");
+        library.addNewBook("Metro", 2005, "Dimitry Glukovsky");
+        library.addNewBook("Stalker", 2004, "Michał Głogowski");
+        library.addNewBook("Metro", 2003, "Dimitry Glukovsky");
+        library.addNewBook("Game of Thrones", 2004, "George R.R. Martin");
+        System.out.println(library.searchWithAllArgs("Metro"));
+        System.out.println(library.searchWithAllArgs("Metro",2004));
+        System.out.println(library.searchWithAllArgs(2004));
+        System.out.println(library.searchWithAllArgs("George R.R. Martin"));
+        System.out.println(library.searchWithAllArgs("George R.R. Martin",2004));
+        System.out.println(library.searchWithAllArgs("Stalker",2004,"Michał Głogowski"));
+
     }
 }

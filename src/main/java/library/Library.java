@@ -73,7 +73,8 @@ public class Library {
         return bookDetails;
     }
 
-    public void searchWithAllArgs(Object ... params) {
+    public String searchWithAllArgs(Object ... params) {
+        String finalString="";
         Map<Long, Book> booksFound = new HashMap<>();
         String s1 = null;
         String s2 = null;
@@ -93,8 +94,7 @@ public class Library {
                         s1 = (String) o;
                         stringCount++;
                     } else {
-                        System.out.println("Wrong args");
-                        return;
+                        return "Wrong args";
                     }
                 }
             } else if (o instanceof Integer) {
@@ -102,26 +102,19 @@ public class Library {
                     y = (Integer) o;
                     yearCount++;
                 } else {
-                    System.out.println("Invalid args");
-                    return;
+                    return "Invalid args";
                 }
             } else {
-                System.out.println("Wrong arguments type2");
-                return;
+                return "Wrong arguments type";
             }
             count++;
         }else{
-            System.out.println("Wrong args");
-            return;
+            return "Pass 3 or less arguments";
         }
         }
         if(count==1){
-            System.out.println("You passed 0 arguments");
-            return;
+            return"You passed 0 arguments";
         }
-        System.out.println("Counts: "+count);
-        System.out.println("stringCount: "+stringCount +"yearCount: "+yearCount);
-        //put all to the table that will require only 3 cheeks
         if(s1!=null&&s2!=null&&y!=0){
             for (Map.Entry<Long,Book> entry:allBooks.entrySet()){
                 if(((entry.getValue().getTitle().equals(s1)|| entry.getValue().getAuthor().equals(s1))&&
@@ -184,13 +177,12 @@ public class Library {
             }
         }
         if(foundCount==0){
-            System.out.println("Not found");
-            return;
+            return "Not found";
         }else{
             for (Map.Entry<Long,Book> entry: booksFound.entrySet()){
-                showAllDetailsById(entry.getValue().getId());
+                finalString+=showAllDetailsById(entry.getValue().getId())+"\n";
             }
         }
-        System.out.println("s1: "+s1+" s2:"+s2+" year: "+y);
+        return finalString;
     }
 }
