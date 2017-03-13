@@ -1,8 +1,6 @@
 package library;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Krzysztof Dudziak on 2017-03-10.
@@ -19,7 +17,6 @@ import java.util.List;
         Iterator<Book> iter = singleBooks.iterator();
         if(iter.hasNext()){
             allbooks+=iter.next().toString()+countBooks();
-           // System.out.println(iter.next().toString()+countBooks());
         }
         return allbooks;
     }

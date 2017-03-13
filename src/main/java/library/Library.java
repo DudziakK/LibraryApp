@@ -1,18 +1,17 @@
 package library;
 
-import java.nio.ShortBuffer;
 import java.util.*;
 
 /**
  * Created by Krzysztof Dudziak on 2017-03-09.
  */
 public class Library {
-    private static long id = 1;
+    private long id = 1;
     private Map<DistinctBookKey, DistinctBook> libraryMap = new HashMap<>();
     private Map<Long, Book> allBooks = new HashMap<>();
 
-    //Allows to add new book to the library with three arguments, if book already exists in library method adds book to the DistinctBook instance,
-    // otherwise new catalog is created and book is assigned to newly created DistinctBook object
+    //Allows to add new book to the library with three arguments, if book already exists in library method adds book to the DistinctBook instance
+    // otherwise new object is created and book is assigned to newly created DistinctBook object
     public void addNewBook(String title, int year, String author) {
         DistinctBook distBook = new DistinctBook();
         Book book = new Book(id, title, year, author);
@@ -26,7 +25,7 @@ public class Library {
         allBooks.put(id, book);
         id++;
     }
-    //Allows to list all books distinctly with information about how many is curently available or lent
+    //Allows to list all books distinctly with information about how many is currently available or lent
     public String showAllBooksDistinctly() {
         String allBooks="";
         for (Map.Entry<DistinctBookKey, DistinctBook> entry : libraryMap.entrySet()) {
@@ -34,7 +33,7 @@ public class Library {
         }
         return allBooks;
     }
-
+    //Allows to remove book by id if book exist in library and is not lent
     public boolean removeBookById(long bookId) {
         if(allBooks.containsKey(bookId)&& !(allBooks.get(bookId).getIsLent())){
             DistinctBookKey dbkTemp = new DistinctBookKey(allBooks.get(bookId).getTitle(),allBooks.get(bookId).getYear(),allBooks.get(bookId).getAuthor());
@@ -47,6 +46,7 @@ public class Library {
             return false;
         }
     }
+    //Allows to lent book by id and pass name of the person who lent the book
     public boolean lentBookById(long bookId,String userName){
         if(allBooks.containsKey(bookId)&&!allBooks.get(bookId).getIsLent()){
             allBooks.get(bookId).setIsLent();
@@ -58,11 +58,7 @@ public class Library {
             return false;
         }
     }
-    public void showAllBooks() {
-       for(Map.Entry<Long,Book> entry: allBooks.entrySet()){
-           System.out.println(entry.getValue().toString());
-       }
-    }
+    //Allows to list all book details by id
     public String showAllDetailsById(long bookId){
         String bookDetails="";
         if(allBooks.containsKey(bookId)){
@@ -72,7 +68,7 @@ public class Library {
         }
         return bookDetails;
     }
-
+    //Allows to search book by different arguments. If arguments are invalid method return specific information
     public String searchWithAllArgs(Object ... params) {
         String finalString="";
         Map<Long, Book> booksFound = new HashMap<>();
@@ -80,19 +76,15 @@ public class Library {
         String s2 = null;
         int foundCount=0;
         int y = 0, count = 1;
-        short stringCount = 0;
-        short yearCount = 0;
 
         for (Object o : params) {
             if(count<4){
             if (o instanceof String) {
                 if (s1 != null) {
                     s2 = (String) o;
-                    stringCount++;
                 } else {
                     if (s1 == null) {
                         s1 = (String) o;
-                        stringCount++;
                     } else {
                         return "Wrong args";
                     }
@@ -100,7 +92,6 @@ public class Library {
             } else if (o instanceof Integer) {
                 if (y == 0) {
                     y = (Integer) o;
-                    yearCount++;
                 } else {
                     return "Invalid args";
                 }
