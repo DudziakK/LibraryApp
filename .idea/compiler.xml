@@ -25,7 +25,7 @@
         <module name="LibraryApp" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.7">
       <module name="LibraryApp" target="1.7" />
     </bytecodeTargetLevel>
   </component>

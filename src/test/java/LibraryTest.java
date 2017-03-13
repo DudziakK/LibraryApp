@@ -41,7 +41,7 @@ public class LibraryTest {
 
     @Test
     public void shouldLentBookAndPassName(){
-        library.addNewBook("Metro", 2004, "Dimitry Glukovsky");
+        library.addNewBook("Metro",2004,"Dimitry Glukovsky");
         System.out.println(library.showAllDetailsById(1));
         assertTrue(library.lentBookById(1,"Krzysztof Dudziak"));
         System.out.println(library.showAllDetailsById(1));
@@ -49,7 +49,7 @@ public class LibraryTest {
     }
     @Test
     public void shouldRemoveBookByIdIfExistsAndIfNotLent(){
-        library.addNewBook("Metro", 2004, "Dimitry Glukovsky");
+        library.addNewBook("Metro",2004,"Dimitry Glukovsky");
         assertTrue(library.removeBookById(1));
         assertFalse(library.removeBookById(2));
     }
